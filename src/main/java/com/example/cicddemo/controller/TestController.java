@@ -28,4 +28,9 @@ public class TestController {
                 .map(ItemResponse::from)
                 .toList();
     }
+
+    @GetMapping("/test")
+    public String test() {
+        return "TEST";
+    }
 }
