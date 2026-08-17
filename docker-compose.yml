@@ -1,0 +1,50 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: cicd-demo-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${DB_NAME:-cicd_demo}
+      POSTGRES_USER: ${DB_USER:-postgres}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-postgres}
+    ports:
+      - "${DB_PORT:-5432}:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-postgres} -d ${DB_NAME:-cicd_demo}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    networks:
+      - cicd-net
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: cicd-demo:local
+    container_name: cicd-demo-app
+    restart: unless-stopped
+    environment:
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_NAME: ${DB_NAME:-cicd_demo}
+      DB_USER: ${DB_USER:-postgres}
+      DB_PASSWORD: ${DB_PASSWORD:-postgres}
+      SERVER_PORT: ${SERVER_PORT:-8080}
+      JAVA_OPTS: "-XX:MaxRAMPercentage=75.0"
+    ports:
+      - "${SERVER_PORT:-8080}:8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - cicd-net
+
+networks:
+  cicd-net:
+    driver: bridge
+
+volumes:
+  pgdata:
