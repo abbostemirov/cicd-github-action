@@ -92,12 +92,12 @@ jobs:
           cache-to: type=gha,mode=max
 
       - name: Scan image with Trivy
-        uses: aquasecurity/trivy-action@0.29.0
+        uses: aquasecurity/trivy-action@v0.36.0 # 'v' harfi qo'shildi (yoki @v0.29.0)
         with:
           image-ref: ${{ env.IMAGE_NAME }}:latest
           format: table
           severity: CRITICAL,HIGH
-          exit-code: '0' # o'rganish bosqichida pipeline'ni to'xtatmaydi; production'da '1' qiling
+          exit-code: '0'
 
   # ------------------------------------------------------------------
   # 3) DEPLOY: namuna bosqich. Haqiqiy serveringiz/К8s klasteringiz
