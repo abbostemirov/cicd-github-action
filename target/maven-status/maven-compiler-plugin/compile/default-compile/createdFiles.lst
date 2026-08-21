@@ -1,0 +1,7 @@
+com/example/cicddemo/repository/ItemRepository.class
+com/example/cicddemo/entity/Item.class
+com/example/cicddemo/config/DataSeeder.class
+com/example/cicddemo/controller/TestController.class
+com/example/cicddemo/controller/HealthController.class
+com/example/cicddemo/controller/ItemResponse.class
+com/example/cicddemo/CicdDemoApplication.class
